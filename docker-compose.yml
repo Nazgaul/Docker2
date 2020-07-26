@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  docker:
+    image: ${DOCKER_REGISTRY-}docker
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile
+      shm_size: '2gb'
+    shm_size: '2gb'
+    ports:
+        - "9222:9222"
+
+    
