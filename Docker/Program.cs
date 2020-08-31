@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,13 +18,22 @@ namespace Docker
                 File.Delete("output2.mp4");
             }
 
+
+            string token = null;
+            using (var client = new HttpClient())
+            {
+                token = await client.GetStringAsync(
+                    "https://spitball-function-dev2.azurewebsites.net/api/studyRoom/code/?code=/Zcx/KGplZt2tX5uh0ljh15eeaqaFBHMqjd9cz4LI0wZTsv4c380gw==");
+            }
+
             var z3 = await "killall Xvfb".Bash(true);
             //export DISPLAY=\":99\"
-            var x2 = await "Xvfb :99 -screen 0 1920x1080x24 &".Bash(true);
-            var tt = await "xdpyinfo -display :99 >/dev/null 2>&1 && echo \"In use\" || echo \"Free\"".Bash(true);
+             await "Xvfb :99 -screen 0 1920x1080x24 &".Bash(true);
+             await "xdpyinfo -display :99 >/dev/null 2>&1 && echo \"In use\" || echo \"Free\"".Bash(true);
             var x = new CancellationTokenSource();
-
-             await "killall chrome".Bash(true);
+            var url =
+                $"https://dev.spitball.co/studyroom/7b0d6988-81ca-40b9-8d70-ac2800cecda6/?token={token}&recordingBot=true";
+            await "killall chrome".Bash(true);
             var z4 = await ProcessAsyncHelper.ExecuteShellCommand("google-chrome", new[]
                 {
                     "--remote-debugging-port=9223",
@@ -39,7 +49,7 @@ namespace Docker
                     "--no-sandbox",
                    // "--headless",
                    // "--remote-debugging-address=0.0.0.0",
-                    "https://www.spitball.co/profile/90182/%D7%90%D7%A8%D7%99%D7%90%D7%9C%20%D7%A4%D7%99%D7%99%D7%A0%D7%96%D7%99%D7%9C%D7%91%D7%A8%D7%92%20%E2%8C%AC"
+                   url
                 }
                 , CancellationToken.None);
 
@@ -49,13 +59,13 @@ namespace Docker
               {
                 "-y -nostdin",
                 "-video_size 1920x1080 -framerate 30 -f x11grab",
+                "-draw_mouse 0",
                 "-i :99",
                 "-c:v libx264 -crf 0 -preset ultrafast",
-                "-draw_mouse 0",
                 "output2.mkv",
             }, x.Token);
 
-            await Task.Delay(TimeSpan.FromSeconds(20));
+            await Task.Delay(TimeSpan.FromSeconds(45));
 
             x.Cancel();
 
@@ -111,9 +121,9 @@ namespace Docker
                 $"-c \"{escapedArgs}\""
             }, shouldWaitToExit, CancellationToken.None);
 
-        
+
         }
 
-       
+
     }
 }
