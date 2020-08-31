@@ -33,6 +33,7 @@ namespace Docker
                     "--window-size=1920,1080",
                     //"--start-maximized",
                     //"--full-screen",
+                    "--kiosk",
                     "--disable-gpu",
                     "--enable-logging --v=1",
                     "--no-sandbox",
