@@ -9,6 +9,6 @@ services:
       shm_size: '2gb'
     shm_size: '2gb'
     ports:
-        - "9222:9222"
+        - "9223:9223"
 
     

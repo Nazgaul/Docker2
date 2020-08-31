@@ -3,6 +3,8 @@
 FROM mcr.microsoft.com/dotnet/core/runtime:3.1-buster-slim AS base
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update
+
+
 RUN apt-get install -y xorg gtk2-engines-pixbuf dbus-x11 xfonts-base xfonts-100dpi xfonts-75dpi xfonts-cyrillic xfonts-scalable
 RUN apt-get install -y xvfb ffmpeg x11-apps x11-utils
 RUN apt-get install -y pulseaudio

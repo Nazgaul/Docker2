@@ -26,15 +26,19 @@ namespace Docker
              await "killall chrome".Bash(true);
             var z4 = await ProcessAsyncHelper.ExecuteShellCommand("google-chrome", new[]
                 {
-                    "--remote-debugging-port=9222",
+                    "--remote-debugging-port=9223",
                     "--no-first-run",
                     "--start-fullscreen",
+                    "--window-position=0,0",
+                    "--window-size=1920,1080",
+                    //"--start-maximized",
+                    //"--full-screen",
                     "--disable-gpu",
                     "--enable-logging --v=1",
                     "--no-sandbox",
-                    "--headless",
-                    "--remote-debugging-address=0.0.0.0",
-                    "https://www.spitball.co/learn?Country=US"
+                   // "--headless",
+                   // "--remote-debugging-address=0.0.0.0",
+                    "https://www.spitball.co/profile/90182/%D7%90%D7%A8%D7%99%D7%90%D7%9C%20%D7%A4%D7%99%D7%99%D7%A0%D7%96%D7%99%D7%9C%D7%91%D7%A8%D7%92%20%E2%8C%AC"
                 }
                 , CancellationToken.None);
 
@@ -46,10 +50,11 @@ namespace Docker
                 "-video_size 1920x1080 -framerate 30 -f x11grab",
                 "-i :99",
                 "-c:v libx264 -crf 0 -preset ultrafast",
+                "-draw_mouse 0",
                 "output2.mkv",
             }, x.Token);
 
-            await Task.Delay(TimeSpan.FromSeconds(30));
+            await Task.Delay(TimeSpan.FromSeconds(20));
 
             x.Cancel();
 
@@ -57,7 +62,7 @@ namespace Docker
             var z22222 = await ProcessAsyncHelper.ExecuteShellCommand("ffmpeg", new[]
               {
                 "-y -nostdin",
-               // "-video_size 1920x1080 -framerate 30 -f x11grab",
+               // "-video_size 1920x1080 -framerate 24 -f x11grab",
                 "-i output2.mkv",
                 "-c:v libx264 -crf 23 -pix_fmt yuv420p",
                 "output2.mp4",
